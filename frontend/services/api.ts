@@ -9,6 +9,7 @@ type RequestOptions = {
   authenticated?: boolean;
 };
 
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://127.0.0.1:8000';
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://127.0.0.1:8000/api/v1';
 
 const buildHeaders = (body?: BodyInit | null) => {
@@ -140,4 +141,41 @@ export const lectureApi = {
       body: JSON.stringify(payload),
       authenticated: true,
     }),
+};
+
+// Simple fetch wrapper for direct API calls
+export const api = {
+  post: async (path: string, data: any, options: RequestOptions = {}) => {
+    const url = path.startsWith('http') ? path : `${API_BASE_URL}/api${path}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      body: JSON.stringify(data),
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw { response: { data: errorData, status: response.status } };
+    }
+    
+    return response.json();
+  },
+
+  get: async (path: string, options: RequestOptions = {}) => {
+    const url = path.startsWith('http') ? path : `${API_BASE_URL}/api${path}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: options.headers,
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw { response: { data: errorData, status: response.status } };
+    }
+    
+    return response.json();
+  },
 };

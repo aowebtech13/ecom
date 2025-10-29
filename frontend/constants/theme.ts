@@ -51,3 +51,42 @@ export const Fonts = Platform.select({
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });
+
+export interface Palette {
+  primary: string;
+  secondary: string;
+  surface: string;
+  card: string;
+  background: string;
+  text: string;
+  muted: string;
+  outline: string;
+  primaryMuted: string;
+}
+
+export const getPalette = (colorScheme: 'light' | 'dark'): Palette => {
+  if (colorScheme === 'dark') {
+    return {
+      primary: '#0a7ea4',
+      secondary: '#06b6d4',
+      surface: '#0f172a',
+      card: '#1e293b',
+      background: '#151718',
+      text: '#ECEDEE',
+      muted: '#64748b',
+      outline: '#334155',
+      primaryMuted: '#0369a1',
+    };
+  }
+  return {
+    primary: '#0a7ea4',
+    secondary: '#06b6d4',
+    surface: '#f8fafc',
+    card: '#ffffff',
+    background: '#fff',
+    text: '#11181C',
+    muted: '#94a3b8',
+    outline: '#e2e8f0',
+    primaryMuted: '#7dd3fc',
+  };
+};

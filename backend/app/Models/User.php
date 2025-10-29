@@ -58,6 +58,31 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Child::class, 'parent_id');
     }
 
+    public function coursesAsInstructor()
+    {
+        return $this->hasMany(Course::class, 'instructor_id');
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'enrollments', 'user_id', 'course_id');
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
+
+    public function gradesGiven()
+    {
+        return $this->hasMany(Grade::class, 'graded_by');
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

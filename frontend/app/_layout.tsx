@@ -22,6 +22,12 @@ export default function RootLayout() {
           <Stack.Screen name="parent/register" />
           <Stack.Screen name="parent/dashboard" />
           <Stack.Screen name="parent/lecture" />
+          <Stack.Screen name="student/login" />
+          <Stack.Screen name="student/dashboard" />
+          <Stack.Screen name="student/courses" />
+          <Stack.Screen name="student/course-detail" />
+          <Stack.Screen name="student/assignments" />
+          <Stack.Screen name="student/profile" />
           <Stack.Screen name="invite/[token]" />
         </Stack>
         <StatusBar style="auto" />

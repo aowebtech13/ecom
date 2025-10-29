@@ -124,6 +124,45 @@ class AuthController extends Controller
         return response()->json(['token' => $token, 'user' => auth('api')->user()]);
     }
 
+    public function registerStudent(Request $request)
+    {
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:6'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => 'student',
+        ]);
+
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json(['token' => $token, 'user' => $user], 201);
+    }
+
+    public function loginStudent(Request $request)
+    {
+        $credentials = $request->only(['email', 'password']);
+
+        $token = auth('api')->attempt($credentials + ['role' => 'student']);
+
+        if (! $token) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+
+        return response()->json(['token' => $token, 'user' => auth('api')->user()]);
+    }
+
     public function logout()
     {
         try {
